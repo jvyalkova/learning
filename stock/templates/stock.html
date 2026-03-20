@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Купить {{ stock.name }}{% endblock %}
+{% block title %}{% if sell_mode %}Продажа{% else %}Покупка{% endif %} {{ stock.name }}{% endblock %}
 
 {% block content %}
     <div class="card mb-4">
@@ -13,19 +13,21 @@
             {% endif %}
             <p><strong>Описание:</strong> {{ stock.description|default:"Нет описания" }}</p>
             <p><strong>Валюта:</strong> {{ stock.currency.sign|default:"-" }}</p>
-            <p><strong>Текущая цена:</strong> {{ form.price.value }} {{ stock.currency.sign }}</p>
+            <p><strong>Текущая цена:</strong> {{ stock.get_random_price }} {{ stock.currency.sign }}</p>
         </div>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h3>Купить акции</h3>
+            <h3>{% if sell_mode %}Продать акции{% else %}Купить акции{% endif %}</h3>
         </div>
         <div class="card-body">
-            <form method="post" action="{% url 'stock:buy' stock.pk %}">
+            <form method="post" action="{% if sell_mode %}{% url 'stock:sell' stock.pk %}{% else %}{% url 'stock:buy' stock.pk %}{% endif %}">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-success">Купить</button>
+                <button type="submit" class="btn {% if sell_mode %}btn-danger{% else %}btn-success{% endif %}">
+                    {% if sell_mode %}Продать{% else %}Купить{% endif %}
+                </button>
                 <a href="{% url 'stock:list' %}" class="btn btn-secondary">Назад к списку</a>
             </form>
         </div>
