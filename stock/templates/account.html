@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Личный кабинет</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Денежные средства</h4>
+        </div>
+        <div class="card-body">
+            {% if currencies %}
+                <ul class="list-group">
+                    {% for acc_currency in currencies %}
+                        <li class="list-group-item">{{ acc_currency.sign }}: {{ acc_currency.amount }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Нет денежных средств</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Акции</h4>
+        </div>
+        <div class="card-body">
+            {% if stocks %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Тикер</th>
+                            <th>Количество</th>
+                            <th>Средняя цена покупки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for acc_stock in stocks %}
+                        <tr>
+                            <td>{{ acc_stock.ticker }}</td>
+                            <td>{{ acc_stock.amount }}</td>
+                            <td>{{ acc_stock.avg }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Нет акций</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div>
+        <a href="{% url 'stock:list' %}" class="btn btn-primary">К списку акций</a>
+    </div>
+{% endblock %}

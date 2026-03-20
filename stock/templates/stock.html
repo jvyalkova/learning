@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Купить {{ stock.name }}{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Акция {{ stock.name }} ({{ stock.ticker }})</h2>
+        </div>
+        <div class="card-body">
+            {% if stock.logo %}
+                <img src="{{ stock.logo.url }}" alt="{{ stock.name }}" width="100" class="mb-3">
+            {% endif %}
+            <p><strong>Описание:</strong> {{ stock.description|default:"Нет описания" }}</p>
+            <p><strong>Валюта:</strong> {{ stock.currency.sign|default:"-" }}</p>
+            <p><strong>Текущая цена:</strong> {{ form.price.value }} {{ stock.currency.sign }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Купить акции</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'stock:buy' stock.pk %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Купить</button>
+                <a href="{% url 'stock:list' %}" class="btn btn-secondary">Назад к списку</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

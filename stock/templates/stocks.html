@@ -1,27 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>List of Stocks</title>
-</head>
-<body>
-    <table border="1">
-        <thead>
+{% extends 'base.html' %}
+
+{% block title %}Список акций{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Список акций</h1>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
             <tr>
-                <th>Ticker</th>
-                <th>Company</th>
-                <th>Last close price</th>
+                <th>Логотип</th>
+                <th>Тикер</th>
+                <th>Компания</th>
+                <th>Последняя цена</th>
+                <th>Действие</th>
             </tr>
         </thead>
         <tbody>
             {% for stock in stocks %}
             <tr>
+                <td>
+                    {% if stock.logo %}
+                        <img src="{{ stock.logo.url }}" alt="{{ stock.name }}" width="40">
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
                 <td>{{ stock.ticker }}</td>
                 <td>{{ stock.name }}</td>
-                <td>{{ stock.get_random_price }}</td>
+                <td>{{ stock.get_random_price }} {{ stock.currency.sign|default:"" }}</td>
+                <td>
+                    <a href="{% url 'stock:detail' stock.pk %}" class="btn btn-primary btn-sm">Купить</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}

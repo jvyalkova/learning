@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Stock Tracker{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <div class="py-3 bg-dark text-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Stock Tracker</h5>
+                        {% if user.is_authenticated %}
+                            <div>
+                                <span>Добро пожаловать, {{ user.username }}</span>
+                                <a href="{% url 'stock:account' %}" class="btn btn-outline-light btn-sm ms-3">Личный кабинет</a>
+                                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-light btn-sm ms-2">Выход</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Вход</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-5 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
